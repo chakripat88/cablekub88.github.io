@@ -1,0 +1,65 @@
+
+body {
+  margin: 0;
+  font-family: 'Prompt', sans-serif;
+  background: linear-gradient(to bottom, #f0f8ff, #fff5e1);
+  color: #333;
+}
+nav {
+  background-color: #0077b6;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+nav button:hover, nav button.active {
+  text-decoration: underline;
+}
+.tab-content {
+  display: none;
+  padding: 20px;
+}
+.tab-content.active {
+  display: block;
+}
+.stock-card {
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.stock-card canvas {
+  max-width: 100%;
+}
+button.buy-stock-btn {
+  background: #00b894;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+#profile-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background: #ff6f61;
+  color: white;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+}
