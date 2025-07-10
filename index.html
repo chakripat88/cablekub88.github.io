@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ตลาดหุ้นการ์ดจอ RTX & AMD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+  body {
+    margin:0; padding:0;
+    font-family: 'Prompt', sans-serif;
+    background: linear-gradient(135deg, #282c34, #3a3f5c);
+    color: #eee;
+  }
+  header {
+    background: #0d47a1;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+  }
+  header h1 {
+    margin: 0; font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  nav button {
+    background: transparent;
+    border: none;
+    color: #ddd;
+    font-size: 0.95rem;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  nav button:hover, nav button.active {
+    background: #1976d2;
+    color: #fff;
+  }
+  main {
+    max-width: 960px;
+    margin: 25px auto;
+    background: #1e2538;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+  }
+  section {
+    display: none;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  section.active {
+    display: block;
+  }
+  h2 {
+    border-bottom: 2px solid #1976d2;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  input, select {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  button.primary {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+  }
+  button.primary:hover {
+    background: #0d47a1;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+  }
+  th, td {
+    padding: 8px 10px;
+    border: 1px solid #444c66;
+    text-align: center;
+  }
+  th {
+    background: #2f3a65;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  li {
+    background: #2f3a65;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .msg {
+    color: #f44336;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .msg.success {
+    color: #4caf50;
+  }
+  label {
+    font-weight: 600;
+  }
+  /* Animation fade in */
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  /* Avatar circle */
+  #profile-avatar {
+    width: 60px; height: 60px;
+    background: #1976d2;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 15px;
+    user-select: none;
+  }
+  /* Scrollable tables */
+  .scrollable-table {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  /* File input style */
+  input[type="file"] {
+    padding: 3px;
+    background: #394a7a;
+    color: #ddd;
+  }
+  /* Responsive */
+  @media (max-width:600px) {
+    main {
+      margin: 10px;
+      padding: 15px;
+    }
+    nav button {
+      font-size: 0.85rem;
+      padding: 6px 8px;
+    }
+    table, th, td {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ตลาดหุ้นการ์ดจอ RTX & AMD</h1>
+  <nav>
+    <button id="nav-login">เข้าสู่ระบบ</button>
+    <button id="nav-register">สมัครสมาชิก</button>
+    <button id="nav-profile" style="display:none;">โปรไฟล์</button>
+    <button id="nav-market" style="display:none;">ตลาดหุ้น</button>
+    <button id="nav-deposit" style="display:none;">เติมเครดิต</button>
+    <button id="nav-withdraw" style="display:none;">ถอนเครดิต</button>
+    <button id="nav-codes" style="display:none;">เติมโค้ด</button>
+    <button id="nav-news" style="display:none;">ข่าวสาร</button>
+    <button id="nav-profit-today" style="display:none;">ผลกำไรวันนี้</button>
+    <button id="nav-admin-users" style="display:none;">จัดการสมาชิก</button>
+    <button id="nav-admin" style="display:none;">จัดการแอดมิน</button>
+    <button id="nav-logout" style="display:none;">ออกจากระบบ</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- หน้าเข้าสู่ระบบ -->
+  <section id="section-login" class="active">
+    <h2>เข้าสู่ระบบ</h2>
+    <div class="msg" id="login-msg"></div>
+    <label for="login-username">ชื่อผู้ใช้หรืออีเมล</label>
+    <input type="text" id="login-username" placeholder="กรอกชื่อผู้ใช้หรืออีเมล" />
+    <label for="login-password">รหัสผ่าน</label>
+    <input type="password" id="login-password" placeholder="กรอกรหัสผ่าน" />
+    <button class="primary" id="btn-login">เข้าสู่ระบบ</button>
+    <p>ยังไม่มีบัญชี? <a href="#" id="to-register" style="color:#64b5f6;">สมัครสมาชิก</a></p>
+  </section>
+
+  <!-- หน้าสมัครสมาชิก -->
+  <section id="section-register">
+    <h2>สมัครสมาชิก</h2>
+    <div class="msg" id="register-msg"></div>
+    <label for="reg-username">ชื่อผู้ใช้</label>
+    <input type="text" id="reg-username" placeholder="ชื่อผู้ใช้" />
+    <label for="reg-email">อีเมล</label>
+    <input type="email" id="reg-email" placeholder="อีเมล" />
+    <label for="reg-password">รหัสผ่าน</label>
+    <input type="password" id="reg-password" placeholder="รหัสผ่าน" />
+    <label for="reg-password2">ยืนยันรหัสผ่าน</label>
+    <input type="password" id="reg-password2" placeholder="ยืนยันรหัสผ่าน" />
+    <button class="primary" id="btn-register">สมัครสมาชิก</button>
+    <p>มีบัญชีแล้ว? <a href="#" id="to-login" style="color:#64b5f6;">เข้าสู่ระบบ</a></p>
+  </section>
+
+  <!-- หน้าโปรไฟล์ -->
+  <section id="section-profile">
+    <h2>โปรไฟล์ของคุณ</h2>
+    <div id="profile-avatar"></div>
+    <p><strong>ชื่อผู้ใช้:</strong> <span id="profile-username"></span></p>
+    <p><strong>อีเมล:</strong> <span id="profile-email"></span></p>
+    <p><strong>เครดิตคงเหลือ:</strong> <span id="profile-credit"></span> เครดิต</p>
+    <h3>หุ้นที่ถืออยู่</h3>
+    <ul id="profile-stocks"><li>ยังไม่มีหุ้น</li></ul>
+  </section>
+
+  <!-- ตลาดหุ้น -->
+  <section id="section-market">
+    <h2>ตลาดหุ้นการ์ดจอ</h2>
+    <h3>NVIDIA RTX</h3>
+    <div id="market-rtx"></div>
+    <h3>AMD RX</h3>
+    <div id="market-amd"></div>
+    <h3>หุ้นของคุณ</h3>
+    <ul id="user-stocks"><li>คุณยังไม่มีหุ้นใด ๆ</li></ul>
+  </section>
+
+  <!-- เติมเครดิต -->
+  <section id="section-deposit">
+    <h2>เติมเครดิต</h2>
+    <p>บัญชีธนาคาร: <strong>กสิกรไทย 156-8-32765-5</strong></p>
+    <p><em>ขั้นต่ำเติม 250 เครดิต</em></p>
+    <div class="msg" id="deposit-msg"></div>
+    <label for="deposit-amount">จำนวนเครดิตที่ต้องการเติม</label>
+    <input type="number" id="deposit-amount" placeholder="เช่น 1000" min="250" />
+    <label for="deposit-slip">อัปโหลดสลิปโอนเงิน (จำลอง)</label>
+    <input type="file" id="deposit-slip" accept="image/*" />
+    <button class="primary" id="btn-deposit">ส่งคำขอเติมเงิน</button>
+
+    <h3>ประวัติการเติมเงิน</h3>
+    <ul id="deposit-history"><li>ยังไม่มีประวัติการเติมเงิน</li></ul>
+  </section>
+
+  <!-- ถอนเครดิต -->
+  <section id="section-withdraw">
+    <h2>ถอนเครดิต</h2>
+    <p><em>ขั้นต่ำถอน 300 เครดิต</em></p>
+    <div class="msg" id="withdraw-msg"></div>
+    <label for="withdraw-amount">จำนวนเครดิตที่ต้องการถอน</label>
+    <input type="number" id="withdraw-amount" placeholder="เช่น 1000" min="300" />
+    <label for="withdraw-bank">บัญชีธนาคารสำหรับรับเงิน</label>
+    <input type="text" id="withdraw-bank" placeholder="ชื่อธนาคาร และเลขบัญชี" />
+    <button class="primary" id="btn-withdraw">ส่งคำขอถอนเงิน</button>
+
+    <h3>ประวัติการถอนเงิน</h3>
+    <ul id="withdraw-history"><li>ยังไม่มีประวัติการถอนเงิน</li></ul>
+  </section>
+
+  <!-- เติมโค้ดเครดิต -->
+  <section id="section-codes">
+    <h2>เติมโค้ดเครดิต</h2>
+    <div class="msg" id="redeem-msg"></div>
+    <label for="redeem-code">กรอกโค้ด</label>
+    <input type="text" id="redeem-code" placeholder="กรอกโค้ดที่ได้รับ" />
+    <button class="primary" id="btn-redeem">เติมโค้ด</button>
+    <h3>โค้ดที่ใช้แล้ว</h3>
+    <ul id="used-codes"><li>ยังไม่มีการใช้โค้ด</li></ul>
+  </section>
+
+  <!-- ข่าวสาร -->
+  <section id="section-news">
+    <h2>ข่าวสาร</h2>
+    <ul id="news-list"><li>ยังไม่มีข่าวสาร</li></ul>
+  </section>
+
+  <!-- ผลกำไรวันนี้ -->
+  <section id="section-profit-today">
+    <h2>ผลกำไรวันนี้</h2>
+    <ul id="profit-today-list"></ul>
+  </section>
+
+  <!-- จัดการสมาชิก (Admin) -->
+  <section id="section-admin-users">
+    <h2>จัดการสมาชิกทั้งหมด (Admin)</h2>
+    <div class="scrollable-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ชื่อผู้ใช้</th>
+            <th>อีเมล</th>
+            <th>เครดิต</th>
+            <th>หุ้นที่ถือ</th>
+            <th>เติมเงินทั้งหมด</th>
+            <th>ถอนเงินทั้งหมด</th>
+          </tr>
+        </thead>
+        <tbody id="admin-users-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- จัดการแอดมิน -->
+  <section id="section-admin">
+    <h2>แผงควบคุมแอดมิน</h2>
+
+    <h3>สร้างโค้ดเติมเครดิต</h3>
+    <div class="msg" id="admin-code-msg"></div>
+    <label for="admin-code">โค้ด</label>
+    <input type="text" id="admin-code" placeholder="โค้ดใหม่" />
+    <label for="admin-code-amount">จำนวนเครดิต</label>
+    <input type="number" id="admin-code-amount" placeholder="จำนวนเครดิต" min="1" />
+    <button class="primary" id="btn-create-code">สร้างโค้ด</button>
+
+    <h3>เพิ่มข่าวสาร</h3>
+    <textarea id="admin-news-text" rows="3" placeholder="พิมพ์ข่าวสาร..."></textarea>
+    <button class="primary" id="btn-add-news">เพิ่มข่าวสาร</button>
+    <button class="primary" id="btn-clear-news" style="background:#d32f2f; margin-left:10px;">ล้างข่าวสารทั้งหมด</button>
+
+    <h3>เติมเครดิตให้ผู้ใช้</h3>
+    <div class="msg" id="admin-credit-msg"></div>
+    <label for="admin-user-credit">ชื่อผู้ใช้</label>
+    <input type="text" id="admin-user-credit" placeholder="ชื่อผู้ใช้" />
+    <label for="admin-credit-amount">จำนวนเครดิต</label>
+    <input type="number" id="admin-credit-amount" placeholder="จำนวนเครดิต" min="1" />
+    <button class="primary" id="btn-add-user-credit">เติมเครดิต</button>
+  </section>
+
+</main>
+
+<script>
+  // ======= ตัวแปรหลัก =======
+  let users = JSON.parse(localStorage.getItem('users') || '[]');
+  let codes = JSON.parse(localStorage.getItem('codes') || '{}');
+  let newsList = JSON.parse(localStorage.getItem('newsList') || '[]');
+  let deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+  let withdrawals = JSON.parse(localStorage.getItem('withdrawals') || '[]');
+  let currentUser = null;
+
+  const stocks = {
+    rtx: [
+      {name: "RTX 1050 TI", price: 500},
+      {name: "RTX 1060", price: 1500},
+      {name: "RTX 2060", price: 3000},
+      {name: "RTX 3060", price: 5000},
+      {name: "RTX 4060", price: 8000},
+      {name: "RTX 4070", price: 13000},
+      {name: "RTX 4080", price: 22000},
+      {name: "RTX 4090", price: 28000},
+      {name: "RTX 5090", price: 30000}
+    ],
+    amd: [
+      {name: "RX 600", price: 1000},
+      {name: "RX 6600", price: 3500},
+      {name: "RX 6700 XT", price: 7000},
+      {name: "RX 6800 XT", price: 12000},
+      {name: "RX 6900 XT", price: 20000},
+      {name: "RX 7990 XT", price: 25000},
+      {name: "RX 9090 XT", price: 30000}
+    ]
+  };
+
+  // คำนวณกำไรรายวัน 2.8%
+  function calculateDailyProfit(count, price) {
+    return count * price * 0.028;
+  }
+
+  // ======= ฟังก์ชันบันทึกข้อมูล =======
+  function saveAll() {
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('codes', JSON.stringify(codes));
+    localStorage.setItem('newsList', JSON.stringify(newsList));
+    localStorage.setItem('deposits', JSON.stringify(deposits));
+    localStorage.setItem('withdrawals', JSON.stringify(withdrawals));
+  }
+
+  // ======= ฟังก์ชันช่วยเหลือ =======
+  function findUser(usernameOrEmail) {
+    return users.find(u => u.username === usernameOrEmail || u.email === usernameOrEmail);
+  }
+
+  // ======= แสดงหน้า =======
+  function showSection(id) {
+    document.querySelectorAll('main section').forEach(s => {
+      s.classList.remove('active');
+    });
+    const section = document.getElementById(id);
+    if (section) section.classList.add('active');
+  }
+
+  // ======= แสดงสถานะเมนู =======
+  function setActiveNav(id) {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(id);
+    if (btn) btn.classList.add('active');
+  }
+
+  function updateNavForLogin() {
+    document.getElementById('nav-login').style.display = 'none';
+    document.getElementById('nav-register').style.display = 'none';
+    document.getElementById('nav-profile').style.display = 'inline-block';
+    document.getElementById('nav-market').style.display = 'inline-block';
+    document.getElementById('nav-deposit').style.display = 'inline-block';
+    document.getElementById('nav-withdraw').style.display = 'inline-block';
+    document.getElementById('nav-codes').style.display = 'inline-block';
+    document.getElementById('nav-news').style.display = 'inline-block';
+    document.getElementById('nav-profit-today').style.display = 'inline-block';
+    document.getElementById('nav-logout').style.display = 'inline-block';
+
+    if (currentUser && currentUser.isAdmin) {
+      document.getElementById('nav-admin').style.display = 'inline-block';
+      document.getElementById('nav-admin-users').style.display = 'inline-block';
+    } else {
+      document.getElementById('nav-admin').style.display = 'none';
+      document.getElementById('nav-admin-users').style.display = 'none';
+    }
+  }
+
+  function updateNavForLogout() {
+    document.getElementById('nav-login').style.display = 'inline-block';
+    document.getElementById('nav-register').style.display = 'inline-block';
+    document.getElementById('nav-profile').style.display = 'none';
+    document.getElementById('nav-market').style.display = 'none';
+    document.getElementById('nav-deposit').style.display = 'none';
+    document.getElementById('nav-withdraw').style.display = 'none';
+    document.getElementById('nav-codes').style.display = 'none';
+    document.getElementById('nav-news').style.display = 'none';
+    document.getElementById('nav-profit-today').style.display = 'none';
+    document.getElementById('nav-admin').style.display = 'none';
+    document.getElementById('nav-admin-users').style.display = 'none';
+    document.getElementById('nav-logout').style.display = 'none';
+  }
+
+  // ======= ฟังก์ชันแสดงข้อมูลโปรไฟล์ =======
+  function renderProfile() {
+    if (!currentUser) return;
+    document.getElementById('profile-username').textContent = currentUser.username;
+    document.getElementById('profile-email').textContent = currentUser.email;
+    document.getElementById('profile-credit').textContent = currentUser.credit.toLocaleString();
+
+    // avatar แรกของชื่อผู้ใช้
+    document.getElementById('profile-avatar').textContent = currentUser.username.charAt(0).toUpperCase();
+
+    // หุ้นที่ถือ
+    const ul = document.getElementById('profile-stocks');
+    ul.innerHTML = '';
+    if (!currentUser.stocks || Object.keys(currentUser.stocks).length === 0) {
+      ul.innerHTML = '<li>ยังไม่มีหุ้น</li>';
+      return;
+    }
+    for (const key in currentUser.stocks) {
+      const count = currentUser.stocks[key];
+      if (count > 0) {
+        const [type, idx] = key.split('-');
+        const name = stocks[type][parseInt(idx)].name;
+        ul.innerHTML += `<li>${name} จำนวน ${count} หุ้น</li>`;
+      }
+    }
+  }
+
+  // ======= ฟังก์ชันแสดงตลาดหุ้น =======
+  function renderMarket() {
+    const rtxDiv = document.getElementById('market-rtx');
+    const amdDiv = document.getElementById('market-amd');
+    rtxDiv.innerHTML = '';
+    amdDiv.innerHTML = '';
+
+    stocks.rtx.forEach((stock, idx) => {
+      rtxDiv.innerHTML += `
+        <div style="background:#394a7a; margin:6px; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>${stock.name}</div>
+          <div>${stock.price.toLocaleString()} เครดิต</div>
+          <button class="primary" onclick="buyStock('rtx', ${idx})">ซื้อหุ้น</button>
+        </div>`;
+    });
+
+    stocks.amd.forEach((stock, idx) => {
+      amdDiv.innerHTML += `
+        <div style="background:#394a7a; margin:6px; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>${stock.name}</div>
+          <div>${stock.price.toLocaleString()} เครดิต</div>
+          <button class="primary" onclick="buyStock('amd', ${idx})">ซื้อหุ้น</button>
+        </div>`;
+    });
+
+    renderUserStocks();
+  }
+
+  // แสดงหุ้นที่ถือของผู้ใช้
+  function renderUserStocks() {
+    const ul = document.getElementById('user-stocks');
+    ul.innerHTML = '';
+    if (!currentUser || !currentUser.stocks || Object.keys(currentUser.stocks).length === 0) {
+      ul.innerHTML = '<li>คุณยังไม่มีหุ้นใด ๆ</li>';
+      return;
+    }
+    for (const key in currentUser.stocks) {
+      const count = currentUser.stocks[key];
+      if (count > 0) {
+        const [type, idx] = key.split('-');
+        const name = stocks[type][parseInt(idx)].name;
+        ul.innerHTML += `<li>${name} จำนวน ${count} หุ้น</li>`;
+      }
+    }
+  }
+
+  // ซื้อหุ้น (ซื้อ 1 หุ้น)
+  function buyStock(type, idx) {
+    if (!currentUser) {
+      alert('กรุณาเข้าสู่ระบบก่อนซื้อหุ้น');
+      return;
+    }
+    const price = stocks[type][idx].price;
+    if (currentUser.credit < price) {
+      alert('เครดิตไม่เพียงพอสำหรับซื้อหุ้นนี้');
+      return;
+    }
+    if (!currentUser.stocks) currentUser.stocks = {};
+    const key = `${type}-${idx}`;
+    currentUser.stocks[key] = (currentUser.stocks[key] || 0) + 1;
+    currentUser.credit -= price;
+    saveAll();
+    alert(`ซื้อหุ้น ${stocks[type][idx].name} จำนวน 1 หุ้น สำเร็จ!`);
+    renderProfile();
+    renderUserStocks();
+  }
+
+  // ======= ระบบเติมเงิน (จำลอง) =======
+  document.getElementById('btn-deposit').onclick = () => {
+    if (!currentUser) {
+      alert('กรุณาเข้าสู่ระบบ');
+      return;
+    }
+    const amount = parseInt(document.getElementById('deposit-amount').value);
+    const slipInput = document.getElementById('deposit-slip');
+    const msg = document.getElementById('deposit-msg');
+    msg.textContent = '';
+    if (!amount || amount < 250) {
+      msg.textContent = 'กรุณากรอกจำนวนเครดิตขั้นต่ำ 250';
+      return;
+    }
+    if (slipInput.files.length === 0) {
+      msg.textContent = 'กรุณาอัปโหลดสลิปโอนเงิน (จำลอง)';
+      return;
+    }
+    // บันทึกประวัติเติมเงิน (สถานะรออนุมัติ)
+    deposits.push({
+      username: currentUser.username,
+      amount,
+      date: new Date().toLocaleString(),
+      status: 'รออนุมัติ'
+    });
+    saveAll();
+    msg.textContent = 'ส่งคำขอเติมเงินเรียบร้อย โปรดรอการอนุมัติจากแอดมิน';
+    renderDepositHistory();
+  };
+
+  // แสดงประวัติเติมเงิน
+  function renderDepositHistory() {
+    const ul = document.getElementById('deposit-history');
+    ul.innerHTML = '';
+    const myDeposits = deposits.filter(d => currentUser && d.username === currentUser.username);
+    if (myDeposits.length === 0) {
+      ul.innerHTML = '<li>ยังไม่มีประวัติการเติมเงิน</li>';
+      return;
+    }
+    myDeposits.forEach(d => {
+      ul.innerHTML += `<li>${d.date} - เติม ${d.amount.toLocaleString()} เครดิต - สถานะ: ${d.status}</li>`;
+    });
+  }
+
+  // ======= ระบบถอนเงิน (จำลอง) =======
+  document.getElementById('btn-withdraw').onclick = () => {
+    if (!currentUser) {
+      alert('กรุณาเข้าสู่ระบบ');
+      return;
+    }
+    const amount = parseInt(document.getElementById('withdraw-amount').value);
+    const bankAccount = document.getElementById('withdraw-bank').value.trim();
+    const msg = document.getElementById('withdraw-msg');
+    msg.textContent = '';
+    if (!amount || amount < 300) {
+      msg.textContent = 'กรุณากรอกจำนวนเครดิตขั้นต่ำ 300';
+      return;
+    }
+    if (amount > currentUser.credit) {
+      msg.textContent = 'เครดิตไม่เพียงพอสำหรับการถอน';
+      return;
+    }
+    if (!bankAccount) {
+      msg.textContent = 'กรุณากรอกบัญชีธนาคารสำหรับรับเงิน';
+      return;
+    }
+    // บันทึกประวัติถอนเงิน (สถานะรออนุมัติ)
+    withdrawals.push({
+      username: currentUser.username,
+      amount,
+      bankAccount,
+      date: new Date().toLocaleString(),
+      status: 'รออนุมัติ'
+    });
+    saveAll();
+    msg.textContent = 'ส่งคำขอถอนเงินเรียบร้อย โปรดรอการอนุมัติจากแอดมิน';
+    renderWithdrawHistory();
+  };
+
+  // แสดงประวัติถอนเงิน
+  function renderWithdrawHistory() {
+    const ul = document.getElementById('withdraw-history');
+    ul.innerHTML = '';
+    const myWithdraws = withdrawals.filter(w => currentUser && w.username === currentUser.username);
+    if (myWithdraws.length === 0) {
+      ul.innerHTML = '<li>ยังไม่มีประวัติการถอนเงิน</li>';
+      return;
+    }
+    myWithdraws.forEach(w => {
+      ul.innerHTML += `<li>${w.date} - ถอน ${w.amount.toLocaleString()} เครดิต - บัญชี: ${w.bankAccount} - สถานะ: ${w.status}</li>`;
+    });
+  }
+
+  // ======= ระบบเติมโค้ดเครดิต =======
+  document.getElementById('btn-redeem').onclick = () => {
+    if (!currentUser) {
+      alert('กรุณาเข้าสู่ระบบ');
+      return;
+    }
+    const code = document.getElementById('redeem-code').value.trim().toUpperCase();
+    const msg = document.getElementById('redeem-msg');
+    msg.textContent = '';
+    if (!code) {
+      msg.textContent = 'กรุณากรอกโค้ด';
+      return;
+    }
+    if (currentUser.usedCodes && currentUser.usedCodes.includes(code)) {
+      msg.textContent = 'คุณใช้โค้ดนี้ไปแล้ว';
+      return;
+    }
+    if (!codes[code]) {
+      msg.textContent = 'โค้ดไม่ถูกต้องหรือหมดอายุ';
+      return;
+    }
+    const credit = codes[code];
+    currentUser.credit += credit;
+    if (!currentUser.usedCodes) currentUser.usedCodes = [];
+    currentUser.usedCodes.push(code);
+    saveAll();
+    msg.textContent = `เติมเครดิตสำเร็จ +${credit.toLocaleString()} เครดิต`;
+    msg.classList.add('success');
+    document.getElementById('redeem-code').value = '';
+    renderProfile();
+    renderUsedCodes();
+  };
+
+  // แสดงโค้ดที่ใช้แล้ว
+  function renderUsedCodes() {
+    const ul = document.getElementById('used-codes');
+    ul.innerHTML = '';
+    if (!currentUser || !currentUser.usedCodes || currentUser.usedCodes.length === 0) {
+      ul.innerHTML = '<li>ยังไม่มีการใช้โค้ด</li>';
+      return;
+    }
+    currentUser.usedCodes.forEach(c => {
+      ul.innerHTML += `<li>${c}</li>`;
+    });
+  }
+
+  // ======= ข่าวสาร =======
+  function renderNews() {
+    const ul = document.getElementById('news-list');
+    ul.innerHTML = '';
+    if (newsList.length === 0) {
+      ul.innerHTML = '<li>ยังไม่มีข่าวสาร</li>';
+      return;
+    }
+    newsList.forEach(n => {
+      ul.innerHTML += `<li>${n}</li>`;
+    });
+  }
+
+  // ======= ผลกำไรวันนี้ =======
+  function getTodayProfit(user) {
+    if (!user.stocks) return 0;
+    let profit = 0;
+    for (const key in user.stocks) {
+      const [type, idx] = key.split('-');
+      const count = user.stocks[key];
+      const price = stocks[type][parseInt(idx)].price;
+      if (count > 0) {
+        profit += calculateDailyProfit(count, price);
+      }
+    }
+    return Math.floor(profit);
+  }
+  function renderProfitToday() {
+    const ul = document.getElementById('profit-today-list');
+    ul.innerHTML = '';
+    if (!currentUser) {
+      ul.innerHTML = '<li>กรุณาเข้าสู่ระบบ</li>';
+      return;
+    }
+    const profit = getTodayProfit(currentUser);
+    ul.innerHTML = `<li>กำไรวันนี้ของคุณ: <strong>${profit.toLocaleString()}</strong> เครดิต</li>`;
+  }
+
+  // ======= จัดการสมาชิกทั้งหมด (Admin) =======
+  function renderAdminUsers() {
+    const tbody = document.getElementById('admin-users-table');
+    tbody.innerHTML = '';
+    users.forEach(user => {
+      // คำนวณเติมเงินทั้งหมดของ user (สถานะสำเร็จ)
+      const totalDeposits = deposits
+        .filter(d => d.username === user.username && d.status === 'สำเร็จ')
+        .reduce((sum, d) => sum + d.amount, 0);
+      // คำนวณถอนเงินทั้งหมด (สถานะไม่ยกเลิก)
+      const totalWithdrawals = withdrawals
+        .filter(w => w.username === user.username && w.status !== 'ยกเลิก')
+        .reduce((sum, w) => sum + w.amount, 0);
+      // หุ้นที่ถือ
+      const stockDesc = Object.entries(user.stocks || {})
+        .map(([key, count]) => {
+          if (count <= 0) return '';
+          const [type, idx] = key.split('-');
+          return `${stocks[type][parseInt(idx)].name}: ${count}`;
+        })
+        .filter(Boolean)
+        .join(', ') || '-';
+      tbody.innerHTML += `
+        <tr>
+          <td>${user.username}</td>
+          <td>${user.email}</td>
+          <td>${user.credit.toLocaleString()}</td>
+          <td>${stockDesc}</td>
+          <td>${totalDeposits.toLocaleString()}</td>
+          <td>${totalWithdrawals.toLocaleString()}</td>
+        </tr>`;
+    });
+  }
+
+  // ======= แอดมินสร้างโค้ด เติมเครดิต =======
+  document.getElementById('btn-create-code').onclick = () => {
+    if (!currentUser || !currentUser.isAdmin) {
+      alert('เฉพาะแอดมินเท่านั้น');
+      return;
+    }
+    const code = document.getElementById('admin-code').value.trim().toUpperCase();
+    const amount = parseInt(document.getElementById('admin-code-amount').value);
+    const msg = document.getElementById('admin-code-msg');
+    msg.textContent = '';
+    msg.classList.remove('success');
+    if (!code || !amount || amount < 1) {
+      msg.textContent = 'กรุณากรอกโค้ดและจำนวนเครดิตให้ถูกต้อง';
+      return;
+    }
+    if (codes[code]) {
+      msg.textContent = 'โค้ดนี้มีอยู่แล้ว';
+      return;
+    }
+    codes[code] = amount;
+    saveAll();
+    msg.textContent = `สร้างโค้ด ${code} จำนวน ${amount.toLocaleString()} เครดิต สำเร็จ`;
+    msg.classList.add('success');
+    document.getElementById('admin-code').value = '';
+    document.getElementById('admin-code-amount').value = '';
+  };
+
+  // แอดมินเพิ่มข่าวสาร
+  document.getElementById('btn-add-news').onclick = () => {
+    if (!currentUser || !currentUser.isAdmin) {
+      alert('เฉพาะแอดมินเท่านั้น');
+      return;
+    }
+    const text = document.getElementById('admin-news-text').value.trim();
+    if (!text) return alert('กรุณากรอกข้อความข่าว');
+    newsList.unshift(text);
+    saveAll();
+    document.getElementById('admin-news-text').value = '';
+    alert('เพิ่มข่าวสารเรียบร้อย');
+    renderNews();
+  };
+
+  // แอดมินล้างข่าวสาร
+  document.getElementById('btn-clear-news').onclick = () => {
+    if (!currentUser || !currentUser.isAdmin) {
+      alert('เฉพาะแอดมินเท่านั้น');
+      return;
+    }
+    if (confirm('ต้องการล้างข่าวสารทั้งหมดหรือไม่?')) {
+      newsList = [];
+      saveAll();
+      renderNews();
+    }
+  };
+
+  // แอดมินเติมเครดิตให้ผู้ใช้
+  document.getElementById('btn-add-user-credit').onclick = () => {
+    if (!currentUser || !currentUser.isAdmin) {
+      alert('เฉพาะแอดมินเท่านั้น');
+      return;
+    }
+    const username = document.getElementById('admin-user-credit').value.trim();
+    const amount = parseInt(document.getElementById('admin-credit-amount').value);
+    const msg = document.getElementById('admin-credit-msg');
+    msg.textContent = '';
+    msg.classList.remove('success');
+    if (!username || !amount || amount < 1) {
+      msg.textContent = 'กรุณากรอกชื่อผู้ใช้และจำนวนเครดิตให้ถูกต้อง';
+      return;
+    }
+    const user = users.find(u => u.username === username);
+    if (!user) {
+      msg.textContent = 'ไม่พบผู้ใช้';
+      return;
+    }
+    user.credit += amount;
+    saveAll();
+    msg.textContent = `เติมเครดิตให้ผู้ใช้ ${username} จำนวน ${amount.toLocaleString()} เครดิต สำเร็จ`;
+    msg.classList.add('success');
+    document.getElementById('admin-user-credit').value = '';
+    document.getElementById('admin-credit-amount').value = '';
+  };
+
+  // ======= สมัครสมาชิก =======
+  document.getElementById('btn-register').onclick = () => {
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const password2 = document.getElementById('reg-password2').value;
+    const msg = document.getElementById('register-msg');
+    msg.textContent = '';
+    if (!username || !email || !password || !password2) {
+      msg.textContent = 'กรุณากรอกข้อมูลให้ครบทุกช่อง';
+      return;
+    }
+    if (password !== password2) {
+      msg.textContent = 'รหัสผ่านไม่ตรงกัน';
+      return;
+    }
+    if (users.some(u => u.username === username)) {
+      msg.textContent = 'ชื่อผู้ใช้นี้ถูกใช้แล้ว';
+      return;
+    }
+    if (users.some(u => u.email === email)) {
+      msg.textContent = 'อีเมลนี้ถูกใช้แล้ว';
+      return;
+    }
+    users.push({
+      username,
+      email,
+      password,
+      credit: 0,
+      stocks: {},
+      isAdmin: false,
+      usedCodes: []
+    });
+    saveAll();
+    alert('สมัครสมาชิกเรียบร้อย โปรดเข้าสู่ระบบ');
+    // กลับไปหน้าเข้าสู่ระบบ
+    document.getElementById('reg-username').value = '';
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-password').value = '';
+    document.getElementById('reg-password2').value = '';
+    showSection('section-login');
+    setActiveNav('nav-login');
+  };
+
+  // ======= เข้าสู่ระบบ =======
+  document.getElementById('btn-login').onclick = () => {
+    const usernameOrEmail = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const msg = document.getElementById('login-msg');
+    msg.textContent = '';
+    if (!usernameOrEmail || !password) {
+      msg.textContent = 'กรุณากรอกข้อมูลให้ครบ';
+      return;
+    }
+    // ตรวจสอบแอดมินพิเศษ
+    if (usernameOrEmail === 'chakripatadmin' && password === 'admin1234') {
+      currentUser = {
+        username: 'chakripatadmin',
+        email: 'admin@admin.com',
+        credit: 0,
+        stocks: {},
+        isAdmin: true,
+        usedCodes: []
+      };
+      saveAll();
+      msg.textContent = '';
+      updateNavForLogin();
+      renderAdminUsers();
+      renderNews();
+      renderMarket();
+      renderProfile();
+      renderDepositHistory();
+      renderWithdrawHistory();
+      renderUsedCodes();
+      renderProfitToday();
+      showSection('section-admin');
+      setActiveNav('nav-admin');
+      alert('เข้าสู่ระบบแอดมินสำเร็จ');
+      return;
+    }
+    const user = users.find(u => (u.username === usernameOrEmail || u.email === usernameOrEmail) && u.password === password);
+    if (!user) {
+      msg.textContent = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+      return;
+    }
+    currentUser = user;
+    msg.textContent = '';
+    updateNavForLogin();
+    renderProfile();
+    renderMarket();
+    renderDepositHistory();
+    renderWithdrawHistory();
+    renderUsedCodes();
+    renderNews();
+    renderProfitToday();
+    showSection('section-profile');
+    setActiveNav('nav-profile');
+  };
+
+  // ======= ออกจากระบบ =======
+  document.getElementById('nav-logout').onclick = () => {
+    if (confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
+      currentUser = null;
+      updateNavForLogout();
+      showSection('section-login');
+      setActiveNav('nav-login');
+    }
+  };
+
+  // ======= เมนูคลิก =======
+  document.getElementById('nav-login').onclick = () => { showSection('section-login'); setActiveNav('nav-login'); }
+  document.getElementById('nav-register').onclick = () => { showSection('section-register'); setActiveNav('nav-register'); }
+  document.getElementById('nav-profile').onclick = () => { renderProfile(); showSection('section-profile'); setActiveNav('nav-profile'); }
+  document.getElementById('nav-market').onclick = () => { renderMarket(); showSection('section-market'); setActiveNav('nav-market'); }
+  document.getElementById('nav-deposit').onclick = () => { renderDepositHistory(); showSection('section-deposit'); setActiveNav('nav-deposit'); }
+  document.getElementById('nav-withdraw').onclick = () => { renderWithdrawHistory(); showSection('section-withdraw'); setActiveNav('nav-withdraw'); }
+  document.getElementById('nav-codes').onclick = () => { renderUsedCodes(); showSection('section-codes'); setActiveNav('nav-codes'); }
+  document.getElementById('nav-news').onclick = () => { renderNews(); showSection('section-news'); setActiveNav('nav-news'); }
+  document.getElementById('nav-profit-today').onclick = () => { renderProfitToday(); showSection('section-profit-today'); setActiveNav('nav-profit-today'); }
+  document.getElementById('nav-admin-users').onclick = () => { renderAdminUsers(); showSection('section-admin-users'); setActiveNav('nav-admin-users'); }
+  document.getElementById('nav-admin').onclick = () => { showSection('section-admin'); setActiveNav('nav-admin'); }
+
+  // ======= ลิงก์เปลี่ยนหน้าเข้าสู่ระบบ/สมัครสมาชิก =======
+  document.getElementById('to-register').onclick = e => {
+    e.preventDefault();
+    showSection('section-register');
+    setActiveNav('nav-register');
+  };
+  document.getElementById('to-login').onclick = e => {
+    e.preventDefault();
+    showSection('section-login');
+    setActiveNav('nav-login');
+  };
+
+  // ======= เริ่มต้น =======
+  function init() {
+    updateNavForLogout();
+
+    // ถ้ามี user ที่ล็อกอินล่าสุด (เก็บใน sessionStorage)
+    const savedUserName = sessionStorage.getItem('currentUser');
+    if (savedUserName) {
+      const user = users.find(u => u.username === savedUserName);
+      if (user) {
+        currentUser = user;
+        updateNavForLogin();
+        renderProfile();
+        renderMarket();
+        renderDepositHistory();
+        renderWithdrawHistory();
+        renderUsedCodes();
+        renderNews();
+        renderProfitToday();
+        showSection('section-profile');
+        setActiveNav('nav-profile');
+      }
+    }
+  }
+
+  // บันทึก currentUser ใน sessionStorage
+  window.addEventListener('beforeunload', () => {
+    if (currentUser) {
+      sessionStorage.setItem('currentUser', currentUser.username);
+    } else {
+      sessionStorage.removeItem('currentUser');
+    }
+  });
+
+  init();
+</script>
+
+</body>
+</html>
